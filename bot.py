@@ -8,7 +8,9 @@ bot = commands.Bot(command_prefix="!$", intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=''))
+    guild_count = len(bot.guilds)
+    status_message = f'{guild_count}サーバー'
+    await bot.change_presence(activity=discord.Game(name=status_message))
 
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
