@@ -6,18 +6,27 @@ import os
 subprocess.run(['python', 'src/database_utils.py'])
 bot = commands.Bot(command_prefix="!$", intents=discord.Intents.all())
 
-@bot.event
-async def on_ready():
+async def update_status():
     guild_count = len(bot.guilds)
     status_message = f'{guild_count}サーバー'
     await bot.change_presence(activity=discord.Game(name=status_message))
 
+@bot.event
+async def on_ready():
+    await update_status()
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
             await bot.load_extension(f'cogs.{filename[:-3]}')
     slash = await bot.tree.sync()        
     print(f'{bot.user} is online \n {len(slash)} slash commands')
 
+@bot.event
+async def on_guild_join(guild):
+    await update_status()
+
+@bot.event
+async def on_guild_remove(guild):
+    await update_status()
 
 @bot.command()
 @commands.is_owner()
