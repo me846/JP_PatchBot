@@ -32,5 +32,14 @@ class ReBackupCommands(commands.Cog):
         else:
             await ctx.send("***指定されたバックアップファイルが存在しません。***")
 
+    @commands.command(name='backupDL')
+    @commands.is_owner()
+    async def download_backup(self, ctx, backup_file_name):
+        backup_path = os.path.join('data/', backup_file_name)
+        if os.path.exists(backup_path):
+            await ctx.send(f"***バックアップファイル {backup_file_name} をダウンロードします。***", file=discord.File(backup_path))
+        else:
+            await ctx.send("***指定されたバックアップファイルが存在しません。***")
+
 async def setup(bot):
     await bot.add_cog(ReBackupCommands(bot))
